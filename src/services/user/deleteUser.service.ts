@@ -1,4 +1,4 @@
-import { list } from '@/fakeData'
+import { list } from '@/data/fakeData'
 
 export const deleteUser = (name: string) => {
   for (let i = 0; i < list.length; i++) {

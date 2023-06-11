@@ -1,4 +1,4 @@
-import { User } from '@/fakeData'
+import { User } from '@/model/User'
 
 export const updateUser = (user: User, newName: string, newJob: string) => {
   user.name = newName
