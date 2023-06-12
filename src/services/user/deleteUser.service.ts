@@ -1,12 +1,15 @@
-import { list } from '@/data/fakeData'
+import { IUserRepository } from '@/repositories/IUserRepository'
 
-export const deleteUser = (name: string) => {
-  for (let i = 0; i < list.length; i++) {
-    if (list[i].name === name) {
-      const founded = list[i]
-      list.splice(i, 1)
-      return founded
-    }
+class DeleteUserService {
+  constructor(private repo: IUserRepository) {}
+
+  async execute(name: string) {
+    const founded = await this.repo.findByName(name)
+
+    if (!founded) throw new Error('User not found')
+
+    return this.repo.remove(founded)
   }
-  return null
 }
+
+export { DeleteUserService }

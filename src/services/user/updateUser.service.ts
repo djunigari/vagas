@@ -1,8 +1,15 @@
 import { User } from '@/model/User'
+import { IUserRepository } from '@/repositories/IUserRepository'
 
-export const updateUser = (user: User, newName: string, newJob: string) => {
-  user.name = newName
-  user.job = newJob
+class UpdateUserService {
+  constructor(private repo: IUserRepository) {}
 
-  return user
+  async execute(id: number, userData: User) {
+    const founded = await this.repo.findById(id)
+    if (!founded) throw new Error('User not found')
+
+    return this.repo.update(founded, userData)
+  }
 }
+
+export { UpdateUserService }

@@ -1,10 +1,10 @@
 import {
-  create,
-  getUsers,
-  remove,
-  update,
-  userAccess,
-} from '@/controllers/user.controller'
+  createUserFactory,
+  deleteUserFactory,
+  getUsersFactory,
+  updateUserFactory,
+  userAccessFactory,
+} from '@/controllers/UserControllerFactory'
 import { isAuthenticated } from '@/services/auth/generateAccessToken'
 import { Router } from 'express'
 
@@ -23,8 +23,18 @@ middleware.delete('/users', (req, res, next) => {
   next()
 })
 
-usersRouter.post('/users', create)
-usersRouter.get('/users', getUsers)
-usersRouter.put('/users', middleware, update)
-usersRouter.delete('/users', middleware, remove)
-usersRouter.get('/users/access', userAccess)
+usersRouter.post('/users', (request, response) =>
+  createUserFactory().handle(request, response),
+)
+usersRouter.get('/users', (request, response) =>
+  getUsersFactory().handle(request, response),
+)
+usersRouter.put('/users', middleware, (request, response) =>
+  updateUserFactory().handle(request, response),
+)
+usersRouter.delete('/users', middleware, (request, response) =>
+  deleteUserFactory().handle(request, response),
+)
+usersRouter.get('/users/access', (request, response) =>
+  userAccessFactory().handle(request, response),
+)

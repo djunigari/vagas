@@ -1,5 +1,13 @@
-import { list } from '@/data/fakeData'
+import { IUserRepository } from '@/repositories/IUserRepository'
 
-export const findUserById = (id: number) => {
-  return list.find((user) => user.id === id)
+class FindUserByIdService {
+  constructor(private repo: IUserRepository) {}
+
+  async execute(id: number) {
+    const founded = await this.repo.findById(id)
+    if (founded) this.repo.addView(founded)
+    return founded
+  }
 }
+
+export { FindUserByIdService }
