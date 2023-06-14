@@ -3,12 +3,12 @@ version: '3'
 services:
   backend:
     build: backend
-    command: npm run dev
+    command: npm run start
     ports:
       - 3000:3000
   frontend:
     build: frontend
-    command: npm run dev
+    command: npm run start
     ports:
       - 8080:3000
     depends_on:
