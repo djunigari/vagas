@@ -3,6 +3,11 @@
 import { IUser } from '@/types/User'
 import { cookies } from 'next/headers'
 
+interface IUserReponseData {
+  error?: string
+  user?: IUser
+}
+
 export async function getUsers(): Promise<IUser[]> {
   const res = await fetch('http://backend:3000/users', { cache: 'no-cache' })
 
@@ -16,15 +21,20 @@ export async function getUsers(): Promise<IUser[]> {
 export async function addUser(userData: {
   name: string
   job: string
-}): Promise<IUser | null> {
+}): Promise<IUserReponseData> {
   const res = await fetch('http://backend:3000/users', {
     cache: 'no-store',
     method: 'POST',
     body: JSON.stringify(userData),
     headers: { 'content-type': 'application/json' },
   })
-  if (res.status === 200) return res.json()
-  return null
+
+  if (res.status === 200) return { user: await res.json() }
+  if (res.status === 400) {
+    const data = await res.json()
+    return { error: data.message }
+  }
+  return {}
 }
 
 export async function deleteUser(name: string): Promise<boolean> {

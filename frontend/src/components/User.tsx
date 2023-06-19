@@ -29,6 +29,12 @@ export function User({
     })
   }
 
+  const cancel = () => {
+    setName(user.name)
+    setJob(user.job || '')
+    setEditable(false)
+  }
+
   return (
     <tr>
       <td className="p-2">{user.id}</td>
@@ -36,6 +42,7 @@ export function User({
         <input
           type="text"
           disabled={!editable}
+          className="bg-white"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
@@ -44,35 +51,46 @@ export function User({
         <input
           type="text"
           disabled={!editable}
+          className="bg-white"
           value={job}
           onChange={(e) => setJob(e.target.value)}
         />
       </td>
       <td className="flex gap-2 p-2">
         {editable ? (
-          <button
-            disabled={isUpdatePending}
-            onClick={handleUpdate}
-            className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
-          >
-            {isUpdatePending ? 'Salvando...' : 'Salvar'}
-          </button>
+          <>
+            <button
+              disabled={isUpdatePending}
+              onClick={handleUpdate}
+              className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
+            >
+              {isUpdatePending ? 'Salvando...' : 'Salvar'}
+            </button>
+            <button
+              disabled={isUpdatePending}
+              onClick={cancel}
+              className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
+            >
+              Cancelar
+            </button>
+          </>
         ) : (
-          <a
-            onClick={() => setEditable(true)}
-            className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
-          >
-            Editar
-          </a>
+          <>
+            <a
+              onClick={() => setEditable(true)}
+              className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
+            >
+              Editar
+            </a>
+            <button
+              disabled={isDeletePending}
+              onClick={handleDelete}
+              className="font-medium text-red-600 dark:text-red-500 hover:underline cursor-pointer"
+            >
+              {isDeletePending ? 'Excluindo...' : 'Excluir'}
+            </button>
+          </>
         )}
-
-        <button
-          disabled={isDeletePending}
-          onClick={handleDelete}
-          className="font-medium text-red-600 dark:text-red-500 hover:underline cursor-pointer"
-        >
-          {isDeletePending ? 'Excluindo...' : 'Excluir'}
-        </button>
       </td>
     </tr>
   )

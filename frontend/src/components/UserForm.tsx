@@ -1,5 +1,6 @@
 'use client'
 
+import { useToast } from '@/components/ui/toast/use-toast'
 import { IUser } from '@/types/User'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Dispatch, SetStateAction, useTransition } from 'react'
@@ -33,6 +34,7 @@ interface UserFormProps {
 }
 
 export function UserForm({ setUsers }: UserFormProps) {
+  const { toast } = useToast()
   const [isPending, startTransition] = useTransition()
   const {
     register,
@@ -45,10 +47,19 @@ export function UserForm({ setUsers }: UserFormProps) {
 
   const onSubmit = (data: any) => {
     startTransition(async () => {
-      const user = await addUser(data)
-      if (user) {
-        setUsers((prev) => [...prev, user])
+      const res = await addUser(data)
+
+      if (res.error) {
+        toast({
+          variant: 'destructive',
+          description: res.error || 'Ocorreu um erro ao salvar!',
+        })
+      } else if (res.user) {
+        setUsers((prev) => [...prev, res.user!])
         reset()
+        toast({
+          description: 'Salvo com sucesso!',
+        })
       }
     })
   }
